@@ -1,0 +1,27 @@
+echo "sed recursive"
+echo "=========================="
+echo "    oldstring=\$1"
+echo "    newstring=\$2"
+echo "    folder=\$3"
+
+
+oldstring=$1
+newstring=$2
+
+if [ -z $oldstring ];then
+    exit 0;
+fi
+
+if [ -z $newstring  ];then
+    folder=.
+else
+    folder=$3
+fi
+
+
+#folder=${3:=.}
+
+
+#grep -rl $oldstring /path/to/folder | xargs sed -i s@$oldstring@$newstring@g
+grep -rl $oldstring $folder | xargs sed -i s@$oldstring@$newstring@g
+

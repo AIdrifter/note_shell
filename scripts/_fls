@@ -1,0 +1,7 @@
+echo $1 $2
+keyword=$1
+if [ -z "$2" ];then
+find ./ -iname "$1" -exec ls -l {} \;
+else
+find ./ -iname "$1" -exec grep --color -wnHA1 "$2" {} \;
+fi
