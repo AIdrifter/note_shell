@@ -27,6 +27,11 @@ search notebook information
 g $bookname
 ```
 
+show notebook information
+```bash
+cl $bookname
+```
+
 
 # Command
 ```bash
