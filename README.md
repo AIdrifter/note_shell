@@ -1,5 +1,4 @@
 # How to start note shell
-========================
 1. clone your note shell
 2. .vimrc and .tmux.conf will update
 3. notebook folder saved note information
@@ -11,8 +10,7 @@ how to install ?
 
 which command support?
 
-# Notebook
-========================
+## Notebook
 Edit notebook information
 ```bash
 c $bookoname $edit
@@ -34,8 +32,7 @@ cl $bookname
 ```
 
 
-# Command
-========================
+## Command
 ```bash
 _fls
 _sed
@@ -44,8 +41,7 @@ _sed
 ```
 
 
-# Others
-========================
+## Others
 You need install vim vundle berfore using vim
 Install Plugins:
 
