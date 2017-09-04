@@ -1,0 +1,55 @@
+# fun() common
+
+```C
+#define TRACE printf("\x1b[37;41m [%s %s][%s:%s:%d] \x1b[0m\n",__DATE__,__TIME__,__FILE__,__FUNCTION__,__LINE__);
+
+// write file debug
+#include <stdarg.h>
+#define DEBUG_LOG_PATH "/tmp/var_debug.log"
+void MAdp_Secure_print(char *fmt, ...)
+{
+    FILE *fd = NULL;
+    va_list args;
+    if ((fd = fopen(DEBUG_LOG_PATH, "at+")) == NULL)
+        return;
+
+    va_start(args, fmt);
+    vfprintf(fd, fmt, args);
+    va_end(args);
+    fflush(fd);
+    fclose(fd);
+}
+
+
+// degbug
+printf("[AI_DBG][%s](%s)...@%d \n",__func__,__FILE__,__LINE__);
+printf("[AI_DBG][%s](%s)...@%d dr(%x) \n",__func__,__FILE__,__LINE__,dr);
+
+// C errno status
+#include <errno.h>
+#include <string.h>
+extern int errno;
+
+printf("[AI_DBG][%s](%s)@%d glibc(%s) dr(%d) \n",__func__,__FILE__,__LINE__,strerror(errno),dr);
+printf("[AI_DBG][%s](%s)@%d glibc(%s) \n",__func__,__FILE__,__LINE__,strerror(errno);
+
+lib_lowprintf("[AI_DBG][%s]...(%s)@%d \n",__func__,__FILE__,__LINE__);
+lib_lowprintf("[AI_DBG][%s]...(%s)@%d  dr(%x) \n",__func__,__FILE__,__LINE__,dr);
+
+// for loop
+int i;
+int idx = ;
+int next = ;
+for (i=0;i<idx;i++)
+    printf("%02x%c",A[i],( i%next == next-1 || i == idx-1 )?'\n':' ');
+
+// for loop function
+static dumpHex(char *name, char *A, , usigned int idx)
+{
+    int i;
+    int next = 16;
+    for (i=0;i<idx;i++)
+        printf("%02x%c",A[i],( i%next == next-1 || i == idx-1 )?'\n':' ');
+}
+
+```
