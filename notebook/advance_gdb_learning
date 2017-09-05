@@ -1,0 +1,61 @@
+# advance gdb learning
+# GDB =====================
+¡Vfno-omit-frame-pointer
+„Ã  arm-none-linux-gnueabi-objdump -d xxxxx.o¡A¬Ý¤@¤U¨C­Ófunction¤@¶i¥h¬O§_¦³ push fp¡A¥H½T©w¦³¦Y¨ì ¡Vfno-omit-frame-pointer¡C
+00000000 <_GLOBAL__sub_I_msAPI_CI_lsc.cpp>:
+   0:   e92d4800        push    {fp, lr}
+   4:   e28db004        add     fp, sp, #4
+
+arm-none-linux-gnueabi-addr2line -e symbols/applications/bin/dvbt_FHD_board 0x41018b40
+arm-none-linux-gnueabi-addr2line -e symbols/applications/bin/tvos 0x69115c
+
+arm-none-linux-gnueabi-addr2line -e libutopia.so 0xf55dabc8 0xf5518bc8
+
+arm-none-linux-gnueabi-addr2line -e libstagefright_omx.so 00013c60
+
+arm-none-linux-gnueabi-gdb ./tsbui/Apps/TsbAppMgr/EU/bin/dvbt_board
+arm-none-linux-gnueabi-gdb symbols/applications/bin/dvbt_board
+arm-none-linux-gnueabi-gdb symbols/applications/bin/tvos
+arm-none-linux-gnueabi-gdb symbols/applications/bin/dvbt_FHD_board
+arm-none-linux-gnueabi-readelf
+
+armv7a-cros-linux-gnueabi-gdb symbols/applications/bin/
+mips-linux-gnueabi-gdb symbols/applications/bin/dvbt_board
+mips-linux-gnu-gdb symbols/applications/bin/dvbt_lite_board
+/tools/mips-4.3-51/mips-4.3/bin/mips-linux-gnu-gdb symbols/applications/bin/dvbt2_board
+set solib-absolute-prefix ./symbols/
+handle SIGTSTP nostop noprint
+handle SIGSTOP nostop noprint
+handle SIG38 nostop noprint
+target remote 172.16.58.42:5678
+core Coredump
+thread apply all bt
+p *(pthread_mutex_t*)
+break msAPI_CI_cc.cpp:CI_HANDLESTRUCT::Cc::FeatureConnect
+break msAPI_CI_cc_rx.cpp:CcRx::SetCcVersion
+break mapi_rec_demux.cpp:mapi_rec_demux::AddRecordPID
+break mapi_demux.cpp:mapi_demux::PVRDscmbConnect
+break mapi_audio_customer.cpp:mapi_audio_customer::SetSoundMuteStatus
+break MW_DTV_AVMonitor.cpp:MW_DTV_AVMonitor::SetMuteFlag if (bMute == true)
+break MSrv_CIMMI.cpp:MSrv_CIMMI::Init
+break MW_DTV_EPG_DVB_PARSER.cpp:MW_DTV_EPG_DVB_PARSER::_EIT_Parser_Cb:1047 if (u16TS == 0x302)
+
+set solib-absolute-prefix ./symbols/
+handle SIGTSTP nostop noprint
+handle SIGSTOP nostop noprint
+handle SIG38 nostop noprint
+target remote 172.16.58.42:5678
+break MSrv_CI_Adaptation.cpp:CIAdaptation::IsInCuProgress
+p aEvent.m_pShortEventDescriptor
+watch ((MSrv_DTV_Player_DVB *)0x1eeb600)->m_bInit
+set solib-absolute-prefix ./symbols/
+
+break apiDMX.c:_MApi_DMX_AVFifo_Reset if ((DmxFltType == 1)&&(bReset == 1))
+break PVR_Path_Upload.cpp:PVR_Path_Upload::ResumeAudioOutput
+break apiDMX.c:MApi_DMX_AVFifo_Reset
+break mapi_storage.cpp:mapi_storage::_Write
+break mapi_storage.cpp:512
+watch this->m_bInit
+break
+kill -9 `pidof dial`
+kill -9 `pidof mongoose`

@@ -1,0 +1,65 @@
+# gdb
+# remote gdb learning
+
+# board Server
+{System::Run} /applications/bin/process
+ps | grep lunch
+gdbserver :5566 --attach $(PID)
+
+
+# client
+# 1. your binary file
+.$(toolchain)-gdb ./symbols/applications/
+ arm-none-linux-gnueabi-gdb
+
+# 2. we need non-striped symbol , find symbol here
+set solib-absolute-prefix ./lib/
+
+# 3.connect
+target remote 172.16.22.23:5566
+
+set solib-search-path  /tools/arm/arm-2012.09/arm-none-linux-gnueabi/libc/lib
+b _DRM_BCERTFORMAT_ParseCertificate
+b DRM_BCERTFORMAT_SetExpirationDate
+b Oem_GetDRMFullPathName
+
+# ignore event
+handle SIG38 nostop
+
+# info
+ilistsize
+whatis variable_name
+
+# break pooint
+break IdleAppFrame::OnKey
+
+break $function_name
+brak file.cpp:100
+break *0x80408123
+
+break <where>
+    set a new breakpoint
+delete <breakpoint#>
+    Remove a breakpoint
+clear
+    Delete all breakpioints
+enable <breakpoint#>
+    Enable a disabled breakpoint
+disable <breakpoint#>
+    Disable a breakpoint
+
+
+# continue
+continue
+
+# next (一行一行)
+n
+
+# printf variable
+# print/format <what>
+p variabble
+
+printf/x $pc 'print program counter'
+ex:pc is 0x7c3e20
+x/4xb 0x7c3e20
+
