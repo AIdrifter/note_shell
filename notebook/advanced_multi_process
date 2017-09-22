@@ -1,0 +1,20 @@
+# Advanced multi process
+
+## Preview Process and Thread concept
+./vudu (binary)
+
+vudu 1000(main thread)(process)
+player 1001(player threads)
+
+process : program stack, heap , virtual memory is indepdant
+thread : global varuable can shread
+cpu執行單位 : threads
+
+## inter-process communication method
+1.pipe
+    Usually use for parent process and child process
+    only exist in kernel(OS)
+    one write, one read => usually parent
+
+
+
