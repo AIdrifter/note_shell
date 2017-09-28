@@ -6,8 +6,9 @@
 // write file debug
 #include <stdarg.h>
 #define DEBUG_LOG_PATH "/tmp/var_debug.log"
-void MAdp_Secure_print(char *fmt, ...)
+void stdout2file(char *fmt, ...)
 {
+#if 0 // synchronize
     FILE *fd = NULL;
     va_list args;
     if ((fd = fopen(DEBUG_LOG_PATH, "at+")) == NULL)
@@ -18,6 +19,17 @@ void MAdp_Secure_print(char *fmt, ...)
     va_end(args);
     fflush(fd);
     fclose(fd);
+#else // performance
+    static FILE *fd = NULL;
+    va_list args;
+    if(fd == NULL)
+        if ((fd = fopen(DEBUG_LOG_PATH, "at+")) == NULL)
+            return;
+
+    va_start(args, fmt);
+    vfprintf(fd, fmt, args);
+    va_end(args);
+#endif
 }
 
 
