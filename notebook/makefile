@@ -116,7 +116,7 @@ clean:
 .SUFFIXS:
 
 清掉內定副檔名list。 用
-.SUFFIXS: .sgml .hack 
+.SUFFIXS: .sgml .hack
 
 加上.sgml .hack到內定list。
 
@@ -271,4 +271,15 @@ MAKE = make
 CXX = g++
 
 If you don't have CC 變數，則自動是cc這個值，可以直接拿$(CC)來用。 自定內隱規則可以寫在任何地方，make會自動先找到他們，等到要用時就會 去用。通常在一些系統上例如Solaris, AIX...已經有Sun IBM的make了， 所以系統管理者通常會把GNU make叫gmake，這時可以設MAKE = gmake。
+
+# cast string
+# Makefile Rule
+
+# Cast string to integer
+# Support version > 5.0
+RH_VER_MAJOR := $(shell echo $(NFX_VERSION) | cut -f1 -d.)
+NFX_VERSION_RATHER_50 := $(shell [ $(RH_VER_MAJOR) -gt 50 -o \( $(RH_VER_MAJOR) -eq 50 \) ] && echo true)
+ifeq ($(NFX_VERSION_RATHER_50),true)
+PLAYREADY_30_ENABLE=1
+endif
 
