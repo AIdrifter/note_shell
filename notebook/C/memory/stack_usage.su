@@ -1,0 +1,5 @@
+stack_usage.c:5:5:add2	16	static
+stack_usage.c:10:5:add3	16	static
+stack_usage.c:15:5:add3_local1	48	static
+stack_usage.c:23:5:add3_local2	48	static
+stack_usage.c:31:5:main	48	static
