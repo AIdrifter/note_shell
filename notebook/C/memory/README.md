@@ -17,7 +17,22 @@ stack_usage.c:23:5:add3_local2  48      static
 stack_usage.c:31:5:main 48      static
 ```
 
-`stack_usage.c:31:5:main 48      static` the result we wante the result we wanted.
+`stack_usage.c:31:5:main 48      static` the result we wanted.
+
+
+# avstack.pl
+1.you must ensure that your object files are compiled with -fstack-usage
+2.replace avr-objdump accronding to your toolchain
+
+```info
+Cost: peak stack usage during a call to the function.
+Frame: stack frame size, obtained from the .su file, plus the call-cost constant.
+Height: height in call graph -- calculated as maximum height of any callee, plus one.
+```
+
+## reference
+https://dlbeer.co.nz/oss/avstack.html
+
 
 
 
