@@ -87,22 +87,22 @@ main(int argc, char *argv[])    /* Allocated in frame for main() */
 ## How does funtion work ?
 
 - register
-ebp:     frame pointer(base pointer)
-esp:     stack pointer
-eax:     accumulator => add and mul operation
-ebx:     base memory address
-ecx:     couter => work for REP and LOOP
-esi/edi: source/destination index  => for string operation
-leave:
-ret:
+* ebp:     frame pointer(base pointer)
+* esp:     stack pointer
+* eax:     accumulator => add and mul operation
+* ebx:     base memory address
+* ecx:     couter => work for REP and LOOP
+* esi/edi: source/destination index  => for string operation
+* leave:
+* ret:
 
 - instruction
-mov ：資料傳送指令，也是最基本的程式設計指令，用於將一個數據從源地址傳送到目標地址（暫存器間的資料傳送本質上也是一樣的）
-sub：減法指令
-lea：取偏移地址
-push：實現壓入操作的指令是PUSH指令
-pop：實現彈出操作的指令
-call：用於儲存當前指令的下一條指令並跳轉到目標函式
+* mov ：資料傳送指令，也是最基本的程式設計指令，用於將一個數據從源地址傳送到目標地址（暫存器間的資料傳送本質上也是一樣的）
+* sub：減法指令
+* lea：取偏移地址
+* push：實現壓入操作的指令是PUSH指令
+* pop：實現彈出操作的指令
+* call：用於儲存當前指令的下一條指令並跳轉到目標函式
 
 
 ```C
@@ -223,12 +223,12 @@ stack_usage.c:31:5:main 48      static
 
 
 ## avstack.pl
-1.you must ensure that your object files are compiled with -fstack-usage
-2.replace avr-objdump accroding to your toolchain
+- you must ensure that your object files are compiled with -fstack-usage
+- replace avr-objdump accroding to your toolchain
 
 ```info
 Cost: peak stack usage during a call to the function.
-Frame: stack frame size, obtained from the .su file, plus the call-cost constant.
+Frame: stack frame size, obtained from the .su file, plus the call-cost constant.( function's original stack frame size.
 Height: height in call graph -- calculated as the maximum height of any callee, plus one.
 ```
 
