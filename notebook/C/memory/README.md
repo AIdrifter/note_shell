@@ -86,7 +86,7 @@ main(int argc, char *argv[])    /* Allocated in frame for main() */
 
 ## How does funtion work ?
 
-- register
+register
 * ebp:     frame pointer(base pointer)
 * esp:     stack pointer
 * eax:     accumulator => add and mul operation
@@ -96,7 +96,7 @@ main(int argc, char *argv[])    /* Allocated in frame for main() */
 * leave:
 * ret:
 
-- instruction
+instruction
 * mov ：資料傳送指令，也是最基本的程式設計指令，用於將一個數據從源地址傳送到目標地址（暫存器間的資料傳送本質上也是一樣的）
 * sub：減法指令
 * lea：取偏移地址
@@ -233,10 +233,10 @@ Height: height in call graph -- calculated as the maximum height of any callee, 
 ```
 
 ## reference
-https://dlbeer.co.nz/oss/avstack.html
-https://pinglinblog.wordpress.com/2016/10/18/linux-%E7%A8%8B%E5%BA%8F%E7%9A%84-memory-layout-%E5%88%9D%E6%B7%BA%E8%AA%8D%E8%AD%98/
-http://www.cnblogs.com/linsanshu/p/3925960.html
-http://hackmd.io/s/SJ6hRj-zg
-http://ccckmit.wikidot.com/gnu:csubroutine
-https://tw.saowen.com/a/3b760fad5a931523d6b7ed68856a9c17ae7bc1812a8d21955c55fbfd64d84278
-https://tw.saowen.com/a/2a090fdae670660b76c287a8336e708c8c21c7922a6027034797f36d0a1a5b2c
+* https://dlbeer.co.nz/oss/avstack.html
+* https://pinglinblog.wordpress.com/2016/10/18/linux-%E7%A8%8B%E5%BA%8F%E7%9A%84-memory-layout-%E5%88%9D%E6%B7%BA%E8%AA%8D%E8%AD%98/
+* http://www.cnblogs.com/linsanshu/p/3925960.html
+* http://hackmd.io/s/SJ6hRj-zg
+* http://ccckmit.wikidot.com/gnu:csubroutine
+* https://tw.saowen.com/a/3b760fad5a931523d6b7ed68856a9c17ae7bc1812a8d21955c55fbfd64d84278
+* https://tw.saowen.com/a/2a090fdae670660b76c287a8336e708c8c21c7922a6027034797f36d0a1a5b2c
