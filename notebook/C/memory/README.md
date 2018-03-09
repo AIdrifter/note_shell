@@ -240,3 +240,59 @@ Height: height in call graph -- calculated as the maximum height of any callee, 
 * http://ccckmit.wikidot.com/gnu:csubroutine
 * https://tw.saowen.com/a/3b760fad5a931523d6b7ed68856a9c17ae7bc1812a8d21955c55fbfd64d84278
 * https://tw.saowen.com/a/2a090fdae670660b76c287a8336e708c8c21c7922a6027034797f36d0a1a5b2c
+
+# warnning
+* mlong-call
+Tells the compiler to perform function calls by first loading the address of the function into a register
+and then performing a subroutine call on this register.
+remove this gcc parameter for avstack.pl
+
+* with mlong-call
+```assembly
+  00000000 <DestroyEntryPoint>:
+     0:   b5b0        push    {r4, r5, r7, lr}
+     2:   af00        add r7, sp, #0
+     4:   4c09        ldr r4, [pc, #36]   ; (2c <DestroyEntryPoint+0x2c>)
+     6:   447c        add r4, pc
+     8:   4b09        ldr r3, [pc, #36]   ; (30 <DestroyEntryPoint+0x30>)
+     a:   447b        add r3, pc
+     c:   4618        mov r0, r3
+     e:   4b09        ldr r3, [pc, #36]   ; (34 <DestroyEntryPoint+0x34>)
+    10:   58e3        ldr r3, [r4, r3]
+    12:   4798        blx r3
+    14:   2300        movs    r3, #0
+    16:   2200        movs    r2, #0
+    18:   2100        movs    r1, #0
+    1a:   2000        movs    r0, #0
+    1c:   4d06        ldr r5, [pc, #24]   ; (38 <DestroyEntryPoint+0x38>)
+    1e:   5965        ldr r5, [r4, r5]
+    20:   47a8        blx r5
+    22:   4b06        ldr r3, [pc, #24]   ; (3c <DestroyEntryPoint+0x3c>)
+    24:   58e3        ldr r3, [r4, r3]
+    26:   4798        blx r3
+    28:   bdb0        pop {r4, r5, r7, pc}
+    2a:   bf00        nop
+    2c:   00000022    andeq   r0, r0, r2, lsr #32
+    30:   000001a2    andeq   r0, r0, r2, lsr #3
+```
+
+* without mlong-call
+```assembly
+  00000000 <DestroyEntryPoint>:
+     0:   b580        push    {r7, lr}
+     2:   af00        add r7, sp, #0
+     4:   4b06        ldr r3, [pc, #24]   ; (20 <DestroyEntryPoint+0x20>)
+     6:   447b        add r3, pc
+     8:   4618        mov r0, r3
+     a:   f7ff fffe   bl  0 <puts>
+     e:   2300        movs    r3, #0
+    10:   2200        movs    r2, #0
+    12:   2100        movs    r1, #0
+    14:   2000        movs    r0, #0
+    16:   f7ff fffe   bl  0 <CloseSession>
+    1a:   f7ff fffe   bl  0 <ReSetTable>
+    1e:   bd80        pop {r7, pc}
+    20:   00000196    muleq   r0, r6, r1
+```
+
+
