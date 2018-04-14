@@ -36,6 +36,7 @@ Represention Learning: 在高維度中 , 嘗試去找低維度的資訊
     - Big data: 原料
     - Machine Learning
     - Artificial Intelligence
+
 ![Data vs  Maching Learning vs Deep Learning](DataVsMachine.png "DataVsMachine.png")
 ![Deep ](Deep.png "Deep.png")
 
