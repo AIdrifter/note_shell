@@ -68,12 +68,12 @@ Represention Learning: 在高維度中 , 嘗試去找低維度的資訊
 - SIMD Translation in DBT
     - SIMD : single instruction multiple data
     - DBT : Dynamic binary Translation
-    - 用scalr做 效果不好
+    - 用`scalr`做 效果不好
 
 - Supported Operations
     - ARMv7 NEON does not support double precision floating-point operations
     - X86-SSE does not support multiply and add operations
-    > 如何讓insttrucion在彼此之間轉換不會浪費
+    > 如何讓instruction在彼此之間轉換不會浪費
 
 
 
@@ -147,7 +147,7 @@ Scheduling              | single tasking                 | Distributed File Syst
 SHA256(Block header, Random nonce) < target (difficulty)
 ```
 - book
-    - bas
+    - bad
         - 1. leading zero(前導零)
         - 2. Solve difficult math(解決困難數學題)
     - good
@@ -195,7 +195,7 @@ SHA256(Block header, Random nonce) < target (difficulty)
 >    .....
 
 - NIST PQC standardization
-    - 制定標準 產業將會大衝擊
+    - **制定標準 產業將會大衝擊**
         - Encourage public analysis on the submitted algorithms
         - Hold conferences for researchers to share analysis and evaluation results
         - Release reports periodically and summarize the rationale for each selsection
