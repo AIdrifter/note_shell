@@ -1,5 +1,4 @@
 # 2018 open source
-==========================
 ## Artificial Intelligence
 - 陳昇瑋
     - 神州遊戲的data拿來寫PHD 論文
@@ -137,10 +136,11 @@ Scheduling              | single tasking                 | Distributed File Syst
     - OurChain(台大老師)
 
 - how PoW-like BlockChain Works?
-
-wallet - TX 交易    - verify
+```info
+ wallet - TX 交易    - verify
        - Mine 挖礦
        - Mine Pool
+```
 
 - 挖礦(Mining) by finding a nonce
 ```info
@@ -192,7 +192,7 @@ SHA256(Block header, Random nonce) < target (difficulty)
                 - Given a bad basis, find a good basis such that SVP or CVP is easier
 
 - Others
-    .....
+>    .....
 
 - NIST PQC standardization
     - 制定標準 產業將會大衝擊
