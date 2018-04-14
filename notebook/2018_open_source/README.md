@@ -36,9 +36,8 @@ Represention Learning: 在高維度中 , 嘗試去找低維度的資訊
     - Big data: 原料
     - Machine Learning
     - Artificial Intelligence
-
-![GitHub](https://github.com/AIdrifter/note_shell/tree/master/notebook/2018_open_source/DataVsMachine.png "DataVsMachine.png")
-![GitHub](https://github.com/AIdrifter/note_shell/tree/master/notebook/2018_open_source/Deep.png "Deep.png")
+![Data vs  Maching Learning vs Deep Learning](DataVsMachine.png "DataVsMachine.png")
+![Deep ](Deep.png "Deep.png")
 
 - 傳統人力 VS Deep Learning
     - 1.瑕疵檢測
