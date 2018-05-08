@@ -1,0 +1,14 @@
+# orange vocabulary
+- Under the pressure of the `board` of directirs, the manager has `abadon` his plan.
+- As far as I know, all the staff should be aboard the plane before the AM.
+    - a-board: board:木板 `a` 有在....之上的意思
+    - go aboardi: 上飛機
+- This `applicant` was employed for his `abounding` work experience
+- To tell you the truth , this job is just `above` the new employes.
+- You could tak a vacation `aboard` after you finish the task.
+    - ab-road
+    - `ab`: escape
+    - `road`: 路
+- The manager `was absent from` the meeting since he was sick.
+- I don't think the new `assi-s-tant` could `ab-sorb` all the information.
+    - absorb one self
