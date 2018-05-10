@@ -2,13 +2,13 @@
 
 if [ ! -z "$2" ];then
     echo "notebook rw mode"
-    vim $note_shell_path/notebook/$1
+    vim $note_shell_path/notebook/shell_command/$1.md
     exit
 fi
 
 if [ ! -z "$1" ] ;then
     echo "notebook r mode"
-    cat $note_shell_path/notebook/$1
+    cat $note_shell_path/notebook/shell_command/$1.md
     exit
 fi
 
