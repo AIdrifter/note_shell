@@ -13,4 +13,11 @@ sudo apt-get install cdargs
 # vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
-echo "install finish"
+# sdcv : dictionary
+sudo apt-get install sdcv
+mkdir -p ~/.stardict/dic/
+cp $note_shell_path/config/dictionary/*  ~/.stardict/dic/
+
+echo "note shell install finish"
+
+
