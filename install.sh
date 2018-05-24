@@ -15,8 +15,10 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # sdcv : dictionary
 sudo apt-get install sdcv
+git clone https://github.com/chusiang/vim-sdcv.git
+cp vim-sdcv/plugin/sdcv.vim ~/.vim/plugin
 mkdir -p ~/.stardict/dic/
-cp $note_shell_path/config/dictionary/*  ~/.stardict/dic/
+cp -rf  $note_shell_path/config/dictionary/*  ~/.stardict/dic/
 
 echo "note shell install finish"
 
