@@ -20,6 +20,11 @@ cp vim-sdcv/plugin/sdcv.vim ~/.vim/plugin
 mkdir -p ~/.stardict/dic/
 cp -rf  $note_shell_path/config/dictionary/*  ~/.stardict/dic/
 
+# chrome
+wget -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb --no-check-certificate
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+sudo apt-get install
+
 echo "note shell install finish"
 
 
