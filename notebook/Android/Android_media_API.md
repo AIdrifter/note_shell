@@ -387,6 +387,25 @@ private int IdealSelectedIndex(long nowMs) {
     53de78     101780       mdat
 ```
 
+- what's mata data?
+    -  moov包含的一系列次級box中存儲著媒體播放所需的元數據（metadata）。
+        - metadata : 描述數據的數據
+            - video
+            - ID :1
+            - Format profile             : Simple@L1
+            - Format settings BVOP       : no
+            - Duration                   : 10mn 57s
+            - width                      : 320 pixels
+            - height                     : 240 pixels
+            - display aspect ratio       : 4:3
+            - Frame rate                 : 29.970 fps
+            - ...etc
+
+```info
+moov  container for all the metadata
+
+```
+
 ## part5 EXO player analysis and handler
 
 - 首先ExoPlayer的入口自然是`ExoPlayerImplInternal`了，在創建ExoPlayer對象之後，ExoPlayer會通過handler，根據當前自身的狀態去不停發放消息，然後自己同時接受這些消息。
@@ -611,11 +630,13 @@ configure (MediaFormat format,
                 MediaCrypto crypto,
                 int flags)
 
-crypto | MediaCrypto: Specify a crypto object to facilitate secure decryption of the media data, Pass null as crypto for non-secure codecs.
+crypto | MediaCrypto: Specify a crypto object to facilitate secure decryption of the media data,
+                      Pass null as crypto for non-secure codecs.
 
 ```
 
-- MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，`StreamingDrmSessionManager.java裡面整個流程都有。
+
+- MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，`StreamingDrmSessionManager.java`裡面整個流程都有。
     - 1.create MediaDrm並且調用其openSession方法，該方法會返回一個sessionID，標識該次解碼工作。
     - 2.create MediaCrypto給MediaCodec 。 它需要一個UUID和initdata，UUID是Widevine的Scheme ID，在Exoplayer的源碼中可以看到,在C.java裡面。而initData就是上面說到的sessionID.
     - 3.對license server做license的call，得到的reponse就是我們需要的license了，此時只需要調用MediaDrm的provideKeyResponse()方法，視頻就可以自動開始播放了。
@@ -623,35 +644,49 @@ crypto | MediaCrypto: Specify a crypto object to facilitate secure decryption of
            - 需要一個MediaCrypto, 獲取MediaDrm對的sessionId讓framework去尋找對應的license
            - 需要一個MediaDrm，負責保存從服務器下載下來的license並且提供一個唯一的sessionId給MediaCrypto.
 
+
 ```C++
 public static final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
 
-// Get sessionId
-MediaDrm mediaDrm = new MediaDrm();
+/* Get sessionId */
+MediaDrm mediaDrm = new MediaDrm(WIDEVINE_UUID);
 String sessionId = mediaDrm.openSession();
 
-// Create MediaCrypto
-/**
-sessionId 是串聯 MediaDrm和MediaCrypto的關鍵
-**/
-MediaCrypto ctypto = new MediaCrypto(WIDEVINE_UUID, sessionId)
+/*
+* Create MediaCrypto
+* sessionId 是串聯 MediaDrm和MediaCrypto的關鍵
+*/
+MediaCrypto ctypto = new MediaCrypto(WIDEVINE_UUID, sessionId);
 
-//用cypto對象來進行解密
-MediaCodec codec = new MediaCodec("xxxx")
-codec.configure(..,...,ctypto)
+/* 用cypto來進行解密 */
+MediaCodec codec = new MediaCodec("xxxx");
+codec.configure(..,...,ctypto);
 
-/**
-注意的是license並不需要在configure之前獲取，可以稍後再進行
-**/
+/*
+ *注意的是license並不需要在configure之前獲取，可以稍後再進行
+*/
 
-//網絡連接
+/* network connect */
 byte[] license = HttpUrlConnection.connect().......
+
+/*
+ * getKeyRequest(byte[] scope, byte[] init, String mimeType,
+ * int keyType, HashMap<String, String> optionalParameters)
+ * mimeType(container)
+ *     smooth streaming  : apllicatiopn X smooth streaming
+ *     fragment   mmp4   : .mp4
+ *     DASH              : HML, CENC
+ * Key type
+ *     remove or add
+*/
+mediaDrm.getKeyRequest(scope, initData, mimeType, keytype,
+        optionalKeyRequestParameters);
+
+ /*
+  * public byte[] provideKeyResponse(byte[] scope, byte[] response)
+  * license response : playready is XML
+ */
 mediaDrm.provideKeyResponse(xxx,license);
-
-/**
-所有工作結束，視頻可以正常播放了。
-**/
-
 ```
 
 ## Previous version(Discard)
@@ -734,3 +769,6 @@ public static final String WV_PORTAL_KEY = "WVPortalKey";
 
 - Android視頻開發進階(part6-安卓的DRM,視頻版權保護)
     - https://www.jianshu.com/p/5a0fb2dedabf
+
+- 使用MediaCodec進行視頻的編碼和解碼
+    - http://mushuichuan.com/2016/11/12/mediacodec/
