@@ -50,14 +50,15 @@ mp.start();
 ## Part3 Android Media API
 - MediaExtractor
     - 可以同一個URL，獲取容器文件的軌道數量，軌道信息(Track)。在確定了軌道信息之後，可以選擇想要解碼的軌道
-    - 只能選擇一個，所以音軌和視頻軌道需要__兩個__不同MediaExtractor給兩個不同MediaCodec解碼，再從該軌道不停的讀取數據放入MediaCodec API進行解碼。
+    - 只能選擇一個，所以音軌和視頻軌道需要**兩個**不同MediaExtractor給兩個不同MediaCodec解碼，再從該軌道不停的讀取數據放入MediaCodec API進行解碼。
 
 - MediaCodec
-    - MediaCodec API則是創建的時候就需要選擇Codec的類型。然後編碼的時候需要安卓平台顯示視頻的Surface，__MediaCrypto__對象(如果視頻被加密的話，這個細節我會在DRM章節介紹)。
+    - MediaCodec API則是創建的時候就需要選擇Codec的類型。然後編碼的時候需要安卓平台顯示視頻的Surface，**MediaCrypto**對象(如果視頻被加密的話，這個細節我會在DRM章節介紹)。
     - 一個MediaCodec在創建之後會在內部維護兩個對列(Queue),一個是InputQueue，一個是OutputQueue。類似生產者消費者的模式，MediaCodec會不停的從InputQueue獲取數據
     - (InputQueue的數據又是又MediaExtractor提供)，解碼，再把解碼之後的數據放入OutputQueue，再提供給Surface讓其視頻內容。
 
-- reference:https://link.jianshu.com/?t=https://github.com/google/grafika
+- reference:grafika
+    - https://github.com/google/grafika
 
 ```C++
 public void playWithUrl() throws IOException {
@@ -125,7 +126,7 @@ public void playWithUrl() throws IOException {
 ```
 
 ```C++
-/**
+    /**
      * 我們用Extractor獲取軌道數量,然後遍歷他們,只要找到第一個軌道是Video的就返回
      */
     private static int selectTrack(MediaExtractor extractor) {
@@ -325,7 +326,7 @@ private void doExtract(MediaExtractor extractor, int trackIndex, MediaCodec deco
 ```
 
 
-- How does DASH to play
+- How does DASH play ?
     - 不同的representation都有一個bandwith的參數，這個參數規定了要使用該視頻文件的最低帶寬（如果沒記錯應該是以bit為單位。
     - 以上述mpd為例，視頻分辨率由高到低的bandwith排列是:4190760 bit（4.2MB/s） ,2073921 bit(2.1 MB/s) , 869460 bit(0.9MB/s).......
     - 播放器每下載一些內容，都會計算當前的下載速度，然後根據當前的下載速度，從最高的分辨率開始，一路遍歷直到找到合適的視頻文件。
@@ -389,7 +390,7 @@ private int IdealSelectedIndex(long nowMs) {
 ## part5 EXO player analysis and handler
 
 - 首先ExoPlayer的入口自然是`ExoPlayerImplInternal`了，在創建ExoPlayer對象之後，ExoPlayer會通過handler，根據當前自身的狀態去不停發放消息，然後自己同時接受這些消息。
-- 比如當我們調用ExoPlayer的prepare()方法時，其實我們就用ExoPlayer的handler去發送了一條消息MSG_PREPARE。
+- 比如當我們調用`ExoPlayer的prepare()`方法時，其實我們就用ExoPlayer的handler去發送了一條消息`MSG_PREPARE`。
 
 
 ```C++
@@ -439,9 +440,9 @@ private int IdealSelectedIndex(long nowMs) {
           break;
 
 ```
-- 最後再叫ExoPlayer所有的MediaSource進行準備prepare。
-- 又或者再看看MSG_DO_SOME_WORK這個消息發放出去之後，ExoPlayer做了什麼
-- 用for search all renderer, video, audio, text.
+- 最後再叫ExoPlayer所有的**MediaSource**進行準備prepare。
+- 又或者再看看`MSG_DO_SOME_WORK`這個消息發放出去之後，ExoPlayer做了什麼?
+- 用for loop search all renderer, video, audio, text.
 
 ```C++
  private void doSomeWork() throws ExoPlaybackException, IOException {
@@ -491,14 +492,13 @@ private int IdealSelectedIndex(long nowMs) {
     - subtitle TextRenderer，
 - 他們每個都負責渲染Render自己負責的那一部分，在ExoPlayer裡面就是這麼一個簡單的for循環，搞定。
 
-- 在一個dosomeWork()結束之後，通過handler再發一次MSG_DO_SOME_WORK
+- 在一個dosomeWork()結束之後，通過handler再發一次`MSG_DO_SOME_WORK`
 
 ```C++
   private void scheduleNextWork(long thisOperationStartTimeMs, long intervalMs) {
     handler.removeMessages(MSG_DO_SOME_WORK);
     handler.sendEmptyMessageAtTime(MSG_DO_SOME_WORK, thisOperationStartTimeMs + intervalMs);
   }
-
 ```
 
 - 大家可以自己觀察一下其他MSG是用來幹嘛的，其實稍微看看就可以發現，都是和Playback相關的一些操作，比如seek，pause，release等等。
@@ -522,12 +522,13 @@ MediaResource         Renderer->render()            change position
            |                |                               |
            |                |                               |
            |                |                               |
-    Accrondding to status, send new message to EXoPLayerINollnernal,
-    All most case is MSG_DO_SOME_WORK
+    Accronding to status, send new message to EXoPLayerINollnernal,
+    Most case is MSG_DO_SOME_WORK
 ```
 - user在創建ExoPlayer之後，調用任何的方法都是發送一條message給他的handler，根據消息的不同，ExoPlayer把消息分發給不同的component
     - prepare就會把消息分發給MediaResource
-    - do_some_work會把消息分發給Render , 根據當前的進度去渲染視頻，音頻和字幕。在處理完一個消息之後，會根據當前狀態發送下一個消息給ExoPlayerImplInternnal。在一個不停止的情況下，消息隊列一般都是:
+    - do_some_work會把消息分發給Render , 根據當前的進度去渲染視頻，音頻和字幕。在處理完一個消息之後，會根據當前狀態發送下一個消息給ExoPlayerImplInternnal。
+    - 在一個不停止的情況下，消息隊列一般都是:
         - 1.MSG_PREPARE
         - 2.MSG_PERIOD_PREPARED
         - 3.MSG_DO_SOME_WORK........不停的do some work...
@@ -614,13 +615,13 @@ crypto | MediaCrypto: Specify a crypto object to facilitate secure decryption of
 
 ```
 
-    - MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，`StreamingDrmSessionManager.java裡面整個流程都有。
-        - 1.create MediaDrm並且調用其openSession方法，該方法會返回一個sessionID，標識該次解碼工作。
-        - 2.create MediaCrypto給MediaCodec 。 它需要一個UUID和initdata，UUID是Widevine的Scheme ID，在Exoplayer的源碼中可以看到,在C.java裡面。而initData就是上面說到的sessionID.
-        - 3.對license server做license的call，得到的reponse就是我們需要的license了，此時只需要調用MediaDrm的provideKeyResponse()方法，視頻就可以自動開始播放了。
-        - 4.conclusion: MediaCodec負責解碼，
-               - 需要一個MediaCrypto, 獲取MediaDrm對的sessionId讓framework去尋找對應的license
-               - 需要一個MediaDrm，負責保存從服務器下載下來的license並且提供一個唯一的sessionId給MediaCrypto.
+- MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，`StreamingDrmSessionManager.java裡面整個流程都有。
+    - 1.create MediaDrm並且調用其openSession方法，該方法會返回一個sessionID，標識該次解碼工作。
+    - 2.create MediaCrypto給MediaCodec 。 它需要一個UUID和initdata，UUID是Widevine的Scheme ID，在Exoplayer的源碼中可以看到,在C.java裡面。而initData就是上面說到的sessionID.
+    - 3.對license server做license的call，得到的reponse就是我們需要的license了，此時只需要調用MediaDrm的provideKeyResponse()方法，視頻就可以自動開始播放了。
+    - 4.conclusion: MediaCodec負責解碼，
+           - 需要一個MediaCrypto, 獲取MediaDrm對的sessionId讓framework去尋找對應的license
+           - 需要一個MediaDrm，負責保存從服務器下載下來的license並且提供一個唯一的sessionId給MediaCrypto.
 
 ```C++
 public static final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
