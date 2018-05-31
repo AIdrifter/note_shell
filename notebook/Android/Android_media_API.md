@@ -388,7 +388,7 @@ private int IdealSelectedIndex(long nowMs) {
 
 ## part5 EXO player analysis and handler
 
-- 首先ExoPlayer的入口自然是ExoPlayerImplInternal了，在創建ExoPlayer對象之後，ExoPlayer會通過handler，根據當前自身的狀態去不停發放消息，然後自己同時接受這些消息。
+- 首先ExoPlayer的入口自然是`ExoPlayerImplInternal`了，在創建ExoPlayer對象之後，ExoPlayer會通過handler，根據當前自身的狀態去不停發放消息，然後自己同時接受這些消息。
 - 比如當我們調用ExoPlayer的prepare()方法時，其實我們就用ExoPlayer的handler去發送了一條消息MSG_PREPARE。
 
 
@@ -404,7 +404,7 @@ private int IdealSelectedIndex(long nowMs) {
   public boolean handleMessage(Message msg) {
     try {
       switch (msg.what) {
-        case MSG_PREPARE:
+        case MSG_PREPARE:  /* First Init Media Source */
           prepareInternal(
               (MediaSource) msg.obj,
               /* resetPosition= */ msg.arg1 != 0,
@@ -419,7 +419,7 @@ private int IdealSelectedIndex(long nowMs) {
         case MSG_SET_SHUFFLE_ENABLED:
           setShuffleModeEnabledInternal(msg.arg1 != 0);
           break;
-        case MSG_DO_SOME_WORK:
+        case MSG_DO_SOME_WORK:  /* almost case */
           doSomeWork();
           break;
         case MSG_SEEK_TO:
@@ -441,7 +441,7 @@ private int IdealSelectedIndex(long nowMs) {
 ```
 - 最後再叫ExoPlayer所有的MediaSource進行準備prepare。
 - 又或者再看看MSG_DO_SOME_WORK這個消息發放出去之後，ExoPlayer做了什麼
-- 用for search all renderer, video, audio, text. 
+- 用for search all renderer, video, audio, text.
 
 ```C++
  private void doSomeWork() throws ExoPlaybackException, IOException {
@@ -465,6 +465,7 @@ private int IdealSelectedIndex(long nowMs) {
 
     boolean renderersEnded = true;
     boolean renderersReadyOrEnded = true;
+    /* Use for loop to search all render, video, audio and text*/
     for (Renderer renderer : enabledRenderers) {
       // TODO: Each renderer should return the maximum delay before which it wishes to be called
       // again. The minimum of these values should then be used as the delay before the next
@@ -482,11 +483,13 @@ private int IdealSelectedIndex(long nowMs) {
       }
       renderersReadyOrEnded = renderersReadyOrEnded && rendererReadyOrEnded;
     }
-
-
 ```
 
-- 大家知道在創建ExoPlayer的時候我們需要傳入一個renderer數組，包括Video，Audio或者字幕的TextRenderer，他們每個都負責渲染Render自己負責的那一部分，在ExoPlayer裡面就是這麼一個簡單的for循環，搞定。
+- 在創建ExoPlayer的時候我們需要傳入一個renderer數組，包括
+    - Video
+    - Audio
+    - subtitle TextRenderer，
+- 他們每個都負責渲染Render自己負責的那一部分，在ExoPlayer裡面就是這麼一個簡單的for循環，搞定。
 
 - 在一個dosomeWork()結束之後，通過handler再發一次MSG_DO_SOME_WORK
 
@@ -504,18 +507,30 @@ private int IdealSelectedIndex(long nowMs) {
 
 ```info
 MSG_PREPARE   MSG_RELEASE    MSG_DO_SOME_WORK          MSG_SEEK
-
-                EXoPLayerINollnernal
-
-
+    |               |             |                      |
+    |               |             |                      |
+    ---------------EXoPLayerINollnernal-------------------
+                    |       |         |
+           ---------|       |         -----------------------
+           |                |                               |
+           |MSG_PREPARE?    | MSG_DO_SOME_WORK?             | MSG_SEEK?
+           |                |                               |
+           |                |                               |
+           |                |                               |
 MediaResource         Renderer->render()            change position
-
-    accrondding to status, send new message to EXoPLayerINollnernal, all most case is MSG_DO_SOME_WORK
+           |                |                               |
+           |                |                               |
+           |                |                               |
+           |                |                               |
+    Accrondding to status, send new message to EXoPLayerINollnernal,
+    All most case is MSG_DO_SOME_WORK
 ```
-- user在創建ExoPlayer之後，調用任何的方法都是發送一條message給他的handler，根據消息的不通，ExoPlayer把消息分發給不同的component，比如prepare就會把消息分發給MediaResource，do_some_work會把消息分發給Render，根據當前的進度去渲染視頻，音頻和字幕。在處理完一個消息之後，會根據當前狀態發送下一個消息給ExoPlayerImplInternnal。在一個不停止的情況下，消息隊列一般都是:
-    - 1.MSG_PREPARE
-    - 2.MSG_PERIOD_PREPARED
-    - 3.MSG_DO_SOME_WORK........不停的do some work...
+- user在創建ExoPlayer之後，調用任何的方法都是發送一條message給他的handler，根據消息的不同，ExoPlayer把消息分發給不同的component
+    - prepare就會把消息分發給MediaResource
+    - do_some_work會把消息分發給Render , 根據當前的進度去渲染視頻，音頻和字幕。在處理完一個消息之後，會根據當前狀態發送下一個消息給ExoPlayerImplInternnal。在一個不停止的情況下，消息隊列一般都是:
+        - 1.MSG_PREPARE
+        - 2.MSG_PERIOD_PREPARED
+        - 3.MSG_DO_SOME_WORK........不停的do some work...
 
 
 - 整個ExoPlayer就是靠Handler來進行狀態維護的，不光只是ExoPlayerImplInternal這個類，其他的很多類比如LoadControl啊等等都是靠Handler來做狀態維護，和消息發放，尤其是ExoPlayer的事件分放部分，都需要用戶自己傳入一個handler。可能這對初次使用的同學會造成一定的困擾。
@@ -542,7 +557,7 @@ MediaResource         Renderer->render()            change position
   public MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector,
       long allowedJoiningTimeMs,
       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-      boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
+      boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler, /* event handler create that will decide processing threads */
       @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
     super(C.TRACK_TYPE_VIDEO, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
     this.allowedJoiningTimeMs = allowedJoiningTimeMs;
@@ -576,16 +591,36 @@ ExoPlayer會讓不同的構件進行相應的操作，再根據操作的結果�
 ```
 
 
-## part6 Android DRM content protection
-- 在這個官方文檔裡面已經講的很詳細了，如果使用`MediaCodec`進行decode的時候,configure()方法需要傳進一個`MediaCrypto`
-- MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，
-StreamingDrmSessionManager.java裡面整個流程都有。
+## part6 Android DRM content protection(EXO prepare MediaResource)
+- DRM platform
+    - Widevine
+    - PlayReady
+    - Adobe Primetime
+    - Apple FairPlay
 
-- 首先我們需要創建一個MediaDrm對象並且調用其openSession方法，該方法會返回一個sessionID，標識該次解碼工作。
-- 第二步我們需要創建一個MediaCrypto對象給MediaCodec 對象。 它需要一個UUID和initdata，UUID是Widevine的Scheme ID，在Exoplayer的源碼中可以看到,在C.java裡面。而initData就是上面說到的sessionID.
-- 最後我們還需要對license server做license的call，得到的reponse就是我們需要的license了，此時只需要調用MediaDrm的provideKeyResponse()方法，視頻就可以自動開始播放了。
-- 所以其實總結一下，MediaCodec負責解碼，它需要一個MediaCrypto對象，同時需要一個MediaDrm對象，前者獲取後者的sessionId讓framework去尋找對應的license，後者負責保存從服務器下載下來的license並且提供一個唯一的sessionId給前者。附上偽代碼
+- How does DRM work?
 
+
+- MediaCodec API with DRM
+    - 在這個官方文檔裡面已經講的很詳細了，如果使用`MediaCodec`進行decode的時候,configure()方法需要傳進一個`MediaCrypto`
+
+```C++
+configure (MediaFormat format,
+                Surface surface,
+                MediaCrypto crypto,
+                int flags)
+
+crypto | MediaCrypto: Specify a crypto object to facilitate secure decryption of the media data, Pass null as crypto for non-secure codecs.
+
+```
+
+    - MediaCodec的drm處理文檔比較齊全，所以問題不大，具體源碼還是又不懂的可以參考ExoPlayer的代碼，`StreamingDrmSessionManager.java裡面整個流程都有。
+        - 1.create MediaDrm並且調用其openSession方法，該方法會返回一個sessionID，標識該次解碼工作。
+        - 2.create MediaCrypto給MediaCodec 。 它需要一個UUID和initdata，UUID是Widevine的Scheme ID，在Exoplayer的源碼中可以看到,在C.java裡面。而initData就是上面說到的sessionID.
+        - 3.對license server做license的call，得到的reponse就是我們需要的license了，此時只需要調用MediaDrm的provideKeyResponse()方法，視頻就可以自動開始播放了。
+        - 4.conclusion: MediaCodec負責解碼，
+               - 需要一個MediaCrypto, 獲取MediaDrm對的sessionId讓framework去尋找對應的license
+               - 需要一個MediaDrm，負責保存從服務器下載下來的license並且提供一個唯一的sessionId給MediaCrypto.
 
 ```C++
 public static final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
@@ -618,7 +653,7 @@ mediaDrm.provideKeyResponse(xxx,license);
 
 ```
 
-# Previous version(Discard)
+## Previous version(Discard)
 - Using the DRM API
     - In a typical DRM session, an Android application uses the DRM framework API to instantiate a DrmManagerClient. The application calls various methods on the DRM client to query rights and perform other DRM-related tasks. Each DrmManagerClient instance has its own unique ID, so the DRM manager is able to differentiate callers.
 
@@ -658,8 +693,6 @@ public static final String WV_PORTAL_KEY = "WVPortalKey";
         int rights = mDrmManager.acquireRights(drmInfoRequest);
     }
 
-
-
   /**
   licenseServerUri 就是 對license server進行http通信的Url
   **/
@@ -682,7 +715,7 @@ public static final String WV_PORTAL_KEY = "WVPortalKey";
 ```
 
 
-# Reference
+## Reference
 - Android視頻開發進階(part1-關於視頻的那些術語)
     - https://www.jianshu.com/p/10e357946447
 
