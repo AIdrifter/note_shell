@@ -1,8 +1,15 @@
 #include "SafeArray.h"
 
 // 動態配置陣列
+#if 0
 SafeArray::SafeArray(int len) {
     length = len;
+    _array = new int[length];
+}
+#endif
+
+// Member initialization list
+SafeArray::SafeArray(int len) : length(len) {
     _array = new int[length];
 }
 
