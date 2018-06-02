@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "Ball.h"
 using namespace std;
 
@@ -9,6 +10,7 @@ using namespace std;
  */
 
 Ball::Ball() {
+    cout<<"Ball Constructor\n"<<endl;
     _radius = 0.0;
     _name = "noname ball";
 }
@@ -23,3 +25,6 @@ Ball::Ball(double radius, string &name) {
     _name = name;
 }
 
+Ball::~Ball() {
+    cout<<"Ball desctructor\n"<<endl;
+}

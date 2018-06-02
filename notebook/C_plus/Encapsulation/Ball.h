@@ -5,6 +5,7 @@ using namespace std;
 
 class Ball {
 public:
+    // constructcor
     Ball();
     Ball(double, const char*);
     Ball(double, string&);
@@ -34,6 +35,8 @@ public:
         return (4 / 3 * 3.14159 * _radius * _radius * _radius);
     }
 
+    // desctructor
+    ~Ball();
 
 /*
  * 在類別封裝時，有一個基本原則是：資訊的最小化公開。如果屬性可以不公開就不公開，如果要取得或設定物件的某些屬性，也是儘量透過方法成員來進行。
