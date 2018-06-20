@@ -16,6 +16,8 @@ if [ ! -z "$1" ] ;then
         echo "#include <stdlib.h>" >> $TEMP_PATH
         echo "#include <stdint.h>" >> $TEMP_PATH
         echo "#include <stdbool.h>" >> $TEMP_PATH
+        echo "#include <string.h>" >> $TEMP_PATH
+        echo "#include <unistd.h>" >> $TEMP_PATH
         echo "" >> $TEMP_PATH
         echo "" >> $TEMP_PATH
         echo "int main()" >> $TEMP_PATH
