@@ -4,7 +4,7 @@
 - 3. notebook folder saved note information
 
 how to install ?
-```bash
+```shell
 ./install.sh
 ```
 ## which command support?
@@ -15,25 +15,44 @@ how to install ?
 
 ## Notebook
 Edit notebook information
-```bash
+```shell
 c $bookoname $edit
 ```
 
 cat notebook information
-```bash
+```shell
 c $bookoname
 ```
 
 search notebook information
-```bash
+```shell
 g $bookname
 ```
 
 show notebook information
-```bash
+```shell
 cl $bookname
 ```
 
+show command on history
+```shell
+# h $keyword
+bash> h git
+
+  562   2018-06-19 23:17:32 git add README.md
+  563   2018-06-19 23:17:35 git add singleton.cpp
+  565   2018-06-19 23:17:40 git commit
+  566   2018-06-19 23:18:32 git push
+  567   2018-06-19 23:18:43 git push
+  571   2018-06-20 15:06:15 git pull
+  577   2018-06-20 15:06:46 git rm a.out
+  581   2018-06-20 15:07:56 git add _notebook.sh
+```
+
+create main.c to test quickly in your current position
+```shell
+c main
+```
 
 ## Others
 - You need install vim vundle berfore using vim
