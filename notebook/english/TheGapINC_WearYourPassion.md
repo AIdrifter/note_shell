@@ -1,4 +1,5 @@
 # The Gap, Inc.: Wear Your Passion
+# Vocabulary
 integral : essential, extremely important or necessary
 shareholder : a person who owns stock in a company
 entity : used to refer to an organization or business
@@ -11,8 +12,8 @@ business philosophy : the beliefs and ideas used to make business decision
 
 
 The Gap,
- Inc
-Wear Your Passion 
+ Inc(In Comanies)
+Wear Your Passion
 
 
 
