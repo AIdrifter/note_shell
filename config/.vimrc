@@ -62,9 +62,10 @@ set backspace=indent,eol,start
 "let b:syntastic_ada_cflags = ' -I/usr/include/libsoup-2.4'
 
 
-" fuzzy ctrlP
-Plugin 'ctrlpvim/ctrlp.vim'   " documwnt
-Plugin 'tacahiroy/ctrlp-funky' " function
+
+" fzf
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
 
 "Commentify
 Plugin 'scrooloose/nerdcommenter'
@@ -229,29 +230,16 @@ let g:bookmark_save_per_working_dir = 1
 let g:bookmark_auto_save = 1
 let g:bookmark_highlight_lines = 1
 
+"
+" majutsushi/tagbar
+"
+nmap <F8> :TagbarToggle<CR>
 
 "
-" 7. fuzzy ctrl P
+" FZF
 "
-"   a.document and history document
-" let g:ctrlp_map = '<leader>p'
-let g:ctrlp_cmd = 'CtrlP'
-map <leader>f :CtrlPMRU<CR>
-let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
-    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
-    \ }
-let g:ctrlp_working_path_mode=0
-let g:ctrlp_match_window_bottom=1
-let g:ctrlp_max_height=15
-let g:ctrlp_match_window_reversed=0
-let g:ctrlp_mruf_max=500
-let g:ctrlp_follow_symlinks=1
-
-"   b. function
-map <F2> :CtrlPFunky<cr>
-let g:ctrlp_extensions = ['funky']
-let g:ctrlp_funky_syntax_highlight = 1
+nnoremap <silent> <C-p> :Files<CR>
+map <leader>f ::History<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  nmap other hot key                                    "
@@ -301,9 +289,20 @@ set t_Co=256       " Explicitly tell Vim that the terminal supports 256 colors
 " 7.support directionary
 nmap <leader>w :call SearchWord()<CR>
 
+" Ag
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+nnoremap <silent> <Leader>a :Ag<CR>
+
+
 colorscheme slate
 " colorscheme monokai
 
+" majutsushi/tagbar
+nmap <F8> :TagbarToggle<CR>
 "maximam current windows ( <leade> + z
 function! Zoom ()
     " check if is the zoomed state (tabnumber > 1 && window == 1)
