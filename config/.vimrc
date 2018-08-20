@@ -2,19 +2,18 @@
 " coding tytle                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-" 2.language UTF8 problem
+" language UTF8 problem
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
 set nu
 
 
-" 3.ignore case and search word
+" ignore case and search word
 set ic
 set hlsearch
 
-" 1.set tap problem
+" set tap problem
 filetype plugin indent on
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -22,7 +21,6 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -61,24 +59,12 @@ set backspace=indent,eol,start
 "let g:syntastic_ada_no_default_include_dirs = 1
 "let b:syntastic_ada_cflags = ' -I/usr/include/libsoup-2.4'
 
-
-
 " fzf
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
 
-"Commentify
+" Commentify
 Plugin 'scrooloose/nerdcommenter'
-
-
-" indent
-" Plugin 'Yggdroot/indentLine'
-
-" Another GDB
-" Plugin 'vim-scripts/Conque-GDB'
-
-"install ntatb control windows
-" Plugin 'Trinity'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -93,28 +79,7 @@ filetype plugin indent on    " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "
-" 1.ConqueGDB
-"
-"Let g:ConqueTerm_Color = 2         " 1: strip color after 200 lines, 2: always with color
-"Let g:ConqueTerm_CloseOnEnd = 1    " close conque when program ends running
-"Let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured
-
-
-"
-" 2.taglist
-"
-"let Tlist_Ctags_Cmd='ctags'
-"let Tlist_Show_One_File=1               "不同时显示多个文件的tag只显示当前文件的
-"let Tlist_WinWidt =28                   "设置taglist的宽度
-"let Tlist_Exit_OnlyWindow=1             "如果taglist窗口是最后一个窗口则退出vim
-""let Tlist_Use_Right_Window=1           "在右侧窗口中显示taglist窗口
-"let Tlist_Use_Top_Windo =1             "在左侧窗口中显示taglist窗口:
-"
-"let g:tagbar_ctags_bin='ctags'          "ctags程序的路径
-"let g:tagbar_width=50                   "窗口宽度的设置
-
-"
-" 3.airline set
+" airline set
 "
 set laststatus=2
 " 使用powerline打過補丁的字體
@@ -134,7 +99,7 @@ nmap ,, :bp<CR>
 
 
 "
-" 4.scrooloose/syntastic
+" scrooloose/syntastic
 "
 let g:syntastic_error_symbol='>>'
 let g:syntastic_warning_symbol='>'
@@ -164,10 +129,8 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 " nnoremap <Leader>sp :lprevious<cr>
 
 
-
-
 "
-" 5.cscope setting
+" cscope setting
 "
 " [S] Find this C symbol
 cs add $CSCOPE_DB
@@ -196,7 +159,7 @@ nmap cd :cs find d
 
 
 "
-" 6.bookmark
+" bookmark
 "
 highlight BookmarkSign ctermbg=NONE ctermfg=160
 highlight BookmarkLine ctermbg=20 ctermfg=NONE
@@ -236,10 +199,21 @@ let g:bookmark_highlight_lines = 1
 nmap <F8> :TagbarToggle<CR>
 
 "
+" Ag
+"
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+nnoremap <silent> <Leader>a :Ag<CR>
+
+"
 " FZF
 "
 nnoremap <silent> <C-p> :Files<CR>
 map <leader>f ::History<CR>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  nmap other hot key                                    "
@@ -252,57 +226,19 @@ nmap nonu :set nonu<CR>
 " paste
 set paste
 
-" auto completer () {} []
-" 補齊括弧
-" 語法
-" inoremap  triger_char  mapping_str
-" 映射指令     觸發字元     映射字串
-"
-" 註<LEFT> 為向右鍵字元
-
-""inoremap ( ()<LEFT>
-"""小括號補齊並將輸入游標左移一個字元
-""
-""inoremap [ []<LEFT>
-"""中括號補齊並將輸入游標左移一個字元
-""
-""inoremap { {}<LEFT>
-"""大括號補齊並將輸入游標左移一個字元
-""
-""inoremap ' ''<LEFT>
-"""單引號補齊並將輸入游標左移一個字元
-""
-""inoremap " ""<LEFT>
-"""雙引號補齊並將輸入游標左移一個字元
-
-
-" 6.nerdcommenter
+" nerdcommenter
 filetype plugin on
 let g:NERDSpaceDelims=1
 let g:NERDTrimTrailingWhitespace = 1
 
-" 5.color display
+" color display
 syntax on
 set t_Co=256       " Explicitly tell Vim that the terminal supports 256 colors
 
 
-" 7.support directionary
+" support directionary
 nmap <leader>w :call SearchWord()<CR>
 
-" Ag
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-nnoremap <silent> <Leader>a :Ag<CR>
-
-
-colorscheme slate
-" colorscheme monokai
-
-" majutsushi/tagbar
-nmap <F8> :TagbarToggle<CR>
 "maximam current windows ( <leade> + z
 function! Zoom ()
     " check if is the zoomed state (tabnumber > 1 && window == 1)
@@ -320,6 +256,10 @@ function! Zoom ()
 endfunction
 nmap <leader>z :call Zoom()<CR>
 
+" scheme
+colorscheme slate
+" colorscheme monokai
+
 " High light unwanted spaces in end of line
 highlight ExtraWhitespace ctermbg=darkred guibg=darkcyan
 autocmd BufEnter * if &ft != 'help' | match ExtraWhitespace /\s\+$/ | endif
@@ -332,7 +272,6 @@ hi CursorLine   cterm=NONE ctermbg=235 ctermfg=NONE
 hi CursorColumn   cterm=NONE ctermbg=242 ctermfg=NONE
 set cursorcolumn
 set cursorline
-
 
 " define your region
 highlight Foo ctermbg=16 guibg=#000000
