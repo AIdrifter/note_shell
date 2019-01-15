@@ -77,7 +77,7 @@
  * Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
  *
  */
-
+#include <stdbool.h>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -87,17 +87,72 @@ using namespace std;
 class Solution {
 public:
     int romanToInt(string s) {
+        vector<bool> a(s.size(),false);
+        vector<int>  val(s.size(),0);
 
+        for(int i=0; i+1 < s.size(); i++)
+        {
+            if(a[i] == false && a[i+1] == false)
+            {
+                if(s[i]=='I' && s[i+1]=='V')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 4;
+                }
+                if(s[i]=='I' && s[i+1]=='X')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 9;
+                }
+                if(s[i]=='X' && s[i+1]=='L')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 40;
+                }
+                if(s[i]=='X' && s[i+1]=='C')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 90;
+                }
+                if(s[i]=='C' && s[i+1]=='D')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 400;
+                }
+                if(s[i]=='C' && s[i+1]=='M')
+                {
+                    a[i] = true; a[i+1] = true;
+                    val[i] = 900;
+                }
+            }
+            else if(a[i] ==false)
+            {
+                if(s[i] == 'I')
+                    val[i] = 1;
+                if(s[i] == 'V')
+                    val[i] = 5;
+                if(s[i] == 'X')
+                    val[i] = 10;
+
+                if(s[i] == 'L')
+                    val[i] = 50;
+                if(s[i] == 'C')
+                    val[i] = 100;
+                if(s[i] == 'D')
+                    val[i] = 500;
+                if(s[i] == 'M')
+                    val[i] = 1000;
+
+                a[i]=true;
+            }
+
+        }
+
+        int sum=0;
+        for (int i =0;i<s.size();i++)
+            sum+=val[i];
+
+        return sum;
     }
 };
-
-#if 1
-int main()
-{
-
-    return 0;
-}
-#endif
-~
-
 
