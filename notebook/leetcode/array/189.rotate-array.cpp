@@ -43,9 +43,47 @@
  * Could you do it in-place with O(1) extra space?
  * 
  */
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstring> // Furthermore dont forget to include the header for the memcpy function
+#include <map>
+
+using namespace std;
+
 class Solution {
-public:
-    void rotate(vector<int>& nums, int k) {
-        
-    }
+    public:
+        void rotate(vector<int>& nums, int k) {
+
+            // note you should prefer std::copy over memcpy. Especially when dealing with STL containers:
+            /*
+             *  basically it works like this:
+             *  std::copy( src, src + size, dest );
+             *
+             *  so, you would do this:
+             *  std::copy( pnIntArray, pnIntArray + 1, vIntVector.begin() );
+             */
+            k = k % nums.size();
+            // if k < nums.size()
+            vector<int> res(nums.size(),0);
+
+            std::memcpy(&res[0] + k          ,&nums[0]                   ,(nums.size()-k) * sizeof(int));
+            std::memcpy(&res[0]              ,&nums[nums.size()-k]       ,k*sizeof(int));
+            std::memcpy(&nums[0]             ,&res[0]                    ,sizeof(int)*nums.size());
+            //copy( nums.begin()     ,nums.end() - k    , res.begin());
+            //copy( nums.begin() + k ,nums.begin() + k  ,res.begin() + k);
+            //copy( res.begin()      ,res.begin() + k   ,nums.begin());
+
+        }
 };
+
+#if 0
+int main()
+{
+    Solution s;
+    vector <int> A = {1,2,3,4,5,6,7};
+    s.rotate(A,3);
+    return 0;
+}
+#endif
+
