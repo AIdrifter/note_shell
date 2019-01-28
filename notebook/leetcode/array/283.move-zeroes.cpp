@@ -30,6 +30,15 @@
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
-        
+        vector<int> res(nums.size(),0);
+        int idx = 0;
+        for (int i=0; i<nums.size(); i++)
+        {
+            if(nums[i]!=0)
+            {
+                res[idx++] = nums[i];
+            }
+        }
+        memcpy(&nums[0], &res[0], sizeof(int)*nums.size());
     }
 };
