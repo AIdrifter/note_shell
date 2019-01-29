@@ -2,18 +2,23 @@
 " coding tytle                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" language UTF8 problem
+let g:ctrlp_extensions = ['buffertag']
+
+" markdown
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+
+" 2.language UTF8 problem
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
 set nu
 
 
-" ignore case and search word
+" 3.ignore case and search word
 set ic
 set hlsearch
 
-" set tap problem
+" 1.set tap problem
 filetype plugin indent on
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -21,6 +26,7 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -44,6 +50,11 @@ Plugin 'MattesGroeger/vim-bookmarks'
 Plugin 'vasconcelloslf/vim-interestingwords' " hight light key word
 Plugin 'airblade/vim-gitgutter'
 
+" majutsushi/tagbar
+Plugin 'majutsushi/tagbar'
+
+Plugin 'tpope/vim-fugitive'
+
 " Airline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -59,12 +70,25 @@ set backspace=indent,eol,start
 "let g:syntastic_ada_no_default_include_dirs = 1
 "let b:syntastic_ada_cflags = ' -I/usr/include/libsoup-2.4'
 
-" fzf
+" markdwon
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
 
-" Commentify
+"Commentify
 Plugin 'scrooloose/nerdcommenter'
+
+
+" indent
+" Plugin 'Yggdroot/indentLine'
+
+" Another GDB
+" Plugin 'vim-scripts/Conque-GDB'
+
+"install ntatb control windows
+" Plugin 'Trinity'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -79,17 +103,36 @@ filetype plugin indent on    " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "
-" airline set
+" 1.ConqueGDB
+"
+"Let g:ConqueTerm_Color = 2         " 1: strip color after 200 lines, 2: always with color
+"Let g:ConqueTerm_CloseOnEnd = 1    " close conque when program ends running
+"Let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured
+
+
+"
+" 2.tagbar
+"
+nmap <silent> <F2> :TagbarToggle<CR>
+let tagbar_left=1
+let tagbar_width = 70
+let tagbar_autofocus = 1
+let tagbar_sort = 0
+
+"
+" 3.airline set
 "
 set laststatus=2
+let g:airline#extensions#tagbar#enabled = 1
+" let g:airline#extensions#tagbar#flags = 's'
 " 使用powerline打過補丁的字體
 let g:airline_powerline_fonts = 1
 " 開啟tabline
 let g:airline#extensions#tabline#enabled = 1
 " tabline中當前buffer兩端的分隔字符
-let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_sep = ' '
 " tabline中未激活buffer兩端的分隔字符
-let g:airline#extensions#tabline#left_alt_sep = '|'
+"let g:airline#extensions#tabline#left_alt_sep = '|'
 " tabline中buffer顯示編號
 let g:airline#extensions#tabline#buffer_nr_show = 1
 " 映射切換buffer的鍵位
@@ -99,7 +142,7 @@ nmap ,, :bp<CR>
 
 
 "
-" scrooloose/syntastic
+" 4.scrooloose/syntastic
 "
 let g:syntastic_error_symbol='>>'
 let g:syntastic_warning_symbol='>'
@@ -129,8 +172,10 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 " nnoremap <Leader>sp :lprevious<cr>
 
 
+
+
 "
-" cscope setting
+" 5.cscope setting
 "
 " [S] Find this C symbol
 cs add $CSCOPE_DB
@@ -159,7 +204,7 @@ nmap cd :cs find d
 
 
 "
-" bookmark
+" 6.bookmark
 "
 highlight BookmarkSign ctermbg=NONE ctermfg=160
 highlight BookmarkLine ctermbg=20 ctermfg=NONE
@@ -193,51 +238,61 @@ let g:bookmark_save_per_working_dir = 1
 let g:bookmark_auto_save = 1
 let g:bookmark_highlight_lines = 1
 
-"
-" majutsushi/tagbar
-"
-nmap <F8> :TagbarToggle<CR>
+" paste
+set paste
 
+" auto completer () {} []
+" 補齊括弧
+" 語法
+" inoremap  triger_char  mapping_str
+" 映射指令     觸發字元     映射字串
 "
-" Ag
-"
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-nnoremap <silent> <Leader>a :Ag<CR>
+" 註<LEFT> 為向右鍵字元
 
-"
-" FZF
-"
-nnoremap <silent> <C-p> :Files<CR>
-map <leader>f ::History<CR>
+""inoremap ( ()<LEFT>
+"""小括號補齊並將輸入游標左移一個字元
+""
+""inoremap [ []<LEFT>
+"""中括號補齊並將輸入游標左移一個字元
+""
+""inoremap { {}<LEFT>
+"""大括號補齊並將輸入游標左移一個字元
+""
+""inoremap ' ''<LEFT>
+"""單引號補齊並將輸入游標左移一個字元
+""
+""inoremap " ""<LEFT>
+"""雙引號補齊並將輸入游標左移一個字元
 
+
+" 6.nerdcommenter
+filetype plugin on
+let g:NERDSpaceDelims=1
+let g:NERDTrimTrailingWhitespace = 1
+
+" 5.color display
+syntax on
+set t_Co=256       " Explicitly tell Vim that the terminal supports 256 colors
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  nmap other hot key                                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 " remove remainder space
-nmap rs :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))<CR>
 nmap nu :set nu<CR>
 nmap nonu :set nonu<CR>
+nmap rs :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))<CR>
 
-" paste
-set paste
-
-" nerdcommenter
-filetype plugin on
-let g:NERDSpaceDelims=1
-let g:NERDTrimTrailingWhitespace = 1
-
-" color display
-syntax on
-set t_Co=256       " Explicitly tell Vim that the terminal supports 256 colors
-
-
-" support directionary
+" 7.support directionary
 nmap <leader>w :call SearchWord()<CR>
+
+
+" FZF
+nnoremap <silent> <C-p> :Files<CR>
+map <leader>c :Commits<CR>
+map <leader>f :History<CR>
+
+colorscheme slate
+" colorscheme monokai
 
 "maximam current windows ( <leade> + z
 function! Zoom ()
@@ -256,10 +311,6 @@ function! Zoom ()
 endfunction
 nmap <leader>z :call Zoom()<CR>
 
-" scheme
-colorscheme slate
-" colorscheme monokai
-
 " High light unwanted spaces in end of line
 highlight ExtraWhitespace ctermbg=darkred guibg=darkcyan
 autocmd BufEnter * if &ft != 'help' | match ExtraWhitespace /\s\+$/ | endif
@@ -272,6 +323,7 @@ hi CursorLine   cterm=NONE ctermbg=235 ctermfg=NONE
 hi CursorColumn   cterm=NONE ctermbg=242 ctermfg=NONE
 set cursorcolumn
 set cursorline
+
 
 " define your region
 highlight Foo ctermbg=16 guibg=#000000
