@@ -32,50 +32,23 @@
 class Solution {
     public:
         ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-            ListNode* l1_ptr   =  l1;
-            ListNode* l2_ptr   =  l2;
-            ListNode* l2_head  =  l2;
-            ListNode* prev_l2  =  l2;
-            ListNode* merge_head = NULL;
-
-            while(l1_ptr->next!=NULL || l2_ptr->next!=NULL)
+            ListNode *dummy = new ListNode(-1);
+            ListNode *cur = dummy;
+            while(l1 && l2)
             {
-                if(l1_ptr->val > l2_ptr->val )
+                if(l1->val > l2->val)
                 {
-                    ListNode* tmp = new ListNode;
-                    tmp->val = l1_ptr->val;
-                    tmp = l2_ptr->next;
-                    l2_ptr->next = tmp;
-                    l2_ptr = l2_ptr->next->next;
+                    cur->next = l2;
+                    l2 = l2->next;
                 }
                 else
                 {
-                    ListNode* tmp = new ListNode;
-
-                    if(prev_l2 == l2_head )
-                        l2_head = tmp;
-
-                    tmp->val = l1_ptr->val;
-                    tmp->next = prev_l2;
-                    prev_l2 = prev_l2->next;
+                    cur->next = l1;
+                    l1 = l1->next;
                 }
+                cur = cur->next;
             }
-
-            if(l1_ptr==NULL)
-            {
-                return l2_head;
-            }
-
-            if(l2_ptr==NULL)
-            {
-                while(l1_ptr!=NULL)
-                {
-                    ListNode* tmp = new ListNode;
-                    tmp->val = l1_ptr->val;
-                    l2_ptr->next = tmp;
-                    l2_ptr = l2_ptr->next;
-                }
-            }
-
+            cur->next = l1? l1:l2;
+            return dummy->next;
         }
 };
