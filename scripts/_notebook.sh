@@ -40,6 +40,7 @@ if [ ! -z "$1" ] ;then
         echo "#if 1" >> $TEMP_PATH
         echo "int main()" >> $TEMP_PATH
         echo "{" >> $TEMP_PATH
+        echo "Soultion S;" >> $TEMP_PATH
         echo "" >> $TEMP_PATH
         echo "    return 0;" >> $TEMP_PATH
         echo "}" >> $TEMP_PATH
