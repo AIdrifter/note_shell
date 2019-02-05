@@ -33,7 +33,7 @@ class Solution {
 public:
     int fun(int i , int j, vector<int>& nums);
     int maxSubArray(vector<int>& nums) {
-#if 1
+#if 0
         int max = INT_MIN;
 
         for (int i=0; i<nums.size(); i++)
@@ -54,12 +54,21 @@ public:
             }
         }
 
-        return max;
 #else
-    
+        int max = INT_MIN;
+        int sum = 0;
 
-    return fun()
+        for (int i=0; i<nums.size(); i++)
+        {
+            sum += nums[i];
+            if (sum > max) // select A[i] or not
+                max = sum;
+
+            if (sum < 0)   // give up A[0]~~A[i] , next step start from A[i+1]
+                sum = 0;
+        }
 #endif
+        return max;
 
 
     }
