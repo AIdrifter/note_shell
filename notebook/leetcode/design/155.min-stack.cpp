@@ -44,36 +44,48 @@
  *
  */
 
-#define STACK_STL 0
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <cstring>
+#include <map>
+using namespace std;
+
+
+
+#define STACK_STL 1
 class MinStack {
 public:
     /** initialize your data structure here. */
-    int stack_capacity = 0;
-    int stack_top = 0;
-    int *ptr;
+    int stack_capacity = 2;
+    int stack_top = 1;
+    int *ptr = NULL;
+    int array[10000]; // Coredump is array size problem
 
     void resize(int stack_size_now)
     {
-        if(stack_size_now>stack_capacity)
+        if(stack_size_now+10>stack_capacity)
         {
-            int *new_ptr = new int(stack_capacity+=200);
-            memcpy(new_ptr,ptr,stack_size_now);
-            delete ptr;
+            stack_capacity+=300;
+            int *new_ptr = new int [stack_capacity];
+            memcpy(new_ptr,ptr,stack_size_now*sizeof(int));
             ptr = new_ptr;
         }
     }
 
     MinStack() {
 #if STACK_STL
-       stack_capacity = 100;
-       ptr = new int(stack_capacity);
+       ptr = new int [stack_capacity];
+       //ptr = array;
 #endif
     }
 
     void push(int x) {
 #if STACK_STL
-        ptr[stack_top++] = x;
+        stack_top++;
         resize(stack_top);
+        ptr[stack_top-1] = x;
 #else
         S.push(x);
 #endif
@@ -87,10 +99,9 @@ public:
         if(min_stack.top()==ptr[stack_top-1])
             min_stack.pop();
 
-        if(stack_top>=0)
+        if(stack_top>=1)
             stack_top--;
 
-        resize(stack_top);
 #else
         if(min_stack.top()==S.top())
              min_stack.pop();
@@ -103,17 +114,33 @@ public:
 #if STACK_STL
        return  ptr[stack_top-1];
 #else
-        return S.top();
+       return S.top();
 #endif
    }
 
     int getMin() {
-        //printf("[DEBUG][%s]@%u \n",__func__,__LINE__);
         return min_stack.top();
     }
 private:
     stack<int> min_stack,S;
 };
+
+#if 0
+int main()
+{
+    MinStack minStack;
+    minStack.push(-2);
+    minStack.push(0);
+    minStack.push(-3);
+    minStack.getMin();  // --> Returns -3.
+    minStack.pop();
+    minStack.top();     // --> Returns 0.
+    minStack.getMin();  // --> Returns -2.
+
+    return 0;
+}
+#endif
+
 
 /**
  * Your MinStack object will be instantiated and called as such:
