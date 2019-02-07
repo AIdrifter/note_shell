@@ -59,7 +59,28 @@
  */
 class Solution {
 public:
-    bool isValidBST(TreeNode* root) {
-        
+    vector<int> nums;
+    void inOrderTraversal(TreeNode *root) {
+        if(root==NULL)
+            return;
+
+        inOrderTraversal(root->left);
+        nums.push_back(root->val);
+        printf("push %u \n",root->val);
+        inOrderTraversal(root->right);
+    }
+
+    bool isValidBST(TreeNode *root) {
+       // You will get ascend sorted array after inorder traversl on BST 
+
+        inOrderTraversal(root);
+
+        for(int i=1; i<nums.size(); i++)
+        {
+            cout<<nums[i]<<endl;
+            if(nums[i-1]>=nums[i])
+                return false;
+        }
+        return true;
     }
 };

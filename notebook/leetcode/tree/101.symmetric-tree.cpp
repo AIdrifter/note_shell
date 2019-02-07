@@ -51,7 +51,25 @@
  */
 class Solution {
 public:
-    bool isSymmetric(TreeNode* root) {
-        
+    bool isSymmetric(TreeNode *root) {
+        if(root == NULL)
+            return true;   
+        return isSymmetric(root->left, root->right);
+    }
+
+    bool isSymmetric(TreeNode *left, TreeNode *right) {
+        if(left == NULL && right)
+            return false;
+
+        if(right == NULL && left)
+            return false;
+
+        if(right == NULL && left == NULL)
+            return true;
+
+        if(right->val != left->val)
+            return false;
+        else
+            return isSymmetric(left->left,right->right) && isSymmetric(left->right,right->left);
     }
 };
