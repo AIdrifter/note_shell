@@ -57,8 +57,28 @@
  * 
  */
 class Solution {
-public:
-    vector<int> nextGreaterElement(vector<int>& findNums, vector<int>& nums) {
-        
-    }
+    public:
+        vector<int> nextGreaterElement(vector<int>& findNums, vector<int>& nums) {
+            vector<int> ans;
+            for (int num : findNums) {
+                ans.push_back(-1);
+
+                //  All elements in nums1 and nums2 are unique.
+                //  => we can get index absolutely in nums2
+                // int index = std::find(nums.begin(), nums.end(), num) - nums.begin();
+                int index;
+                for(index =0; nums.size(); index++)
+                {
+                    if(nums[index] == num)
+                        break;
+                }
+
+                for (int i = index; i < nums.size(); ++i)
+                    if (nums[i] > num) {
+                        ans.back() = nums[i];
+                        break;
+                    }
+            }
+            return ans;
+        }
 };
