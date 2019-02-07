@@ -40,7 +40,40 @@ bool isBadVersion(int version);
 
 class Solution {
 public:
+    int binary_search(int start, int end)
+    {
+        // To overcome overflow . (A+B)/2  => A + (B-A)/2, if A<B
+        int mid = start+ (end-start)/2;
+
+        // F T T
+        if(isBadVersion(mid-1) == false && isBadVersion(mid) == true && isBadVersion(mid+1) == true )
+            return mid;
+
+        // F F T
+        if(isBadVersion(mid-1) == false && isBadVersion(mid) == false && isBadVersion(mid+1) == true )
+            return mid+1;
+
+        if(isBadVersion(mid))
+            return binary_search(start,mid);
+        else
+            return binary_search(mid,end);
+    }
+
     int firstBadVersion(int n) {
-        
+#if 0
+        for(int i=1; i<=n; i++)
+        {
+            if(isBadVersion(i))
+                return i;
+        }
+        return n;
+#else
+        // Binary Search
+        if(n==1)
+            return 1;
+
+        return binary_search(1,n);
+
+#endif
     }
 };
