@@ -28,8 +28,21 @@
  * 
  */
 class Solution {
-public:
-    void moveZeroes(vector<int>& nums) {
-        
-    }
+    public:
+        void moveZeroes(vector<int>& nums) {
+            int len = nums.size();
+
+            // https://kw0006667.wordpress.com/2014/02/06/cstl-vector-erase-%E5%B0%8E%E8%87%B4%E8%BF%B4%E5%9C%88%E9%8C%AF%E8%AA%A4/
+            // 宣告一個 iterator i，並將它指向 IntegerVec 的開始（begin）
+            // 迴圈中會檢查 iterator 是否已經指向了 IntegerVec 的結尾（end）
+            // 不讓迴圈自己在每圈都對 iterator + 1，而是讓我自在迴圈裡自己控制
+            for(vector<int>::iterator iter = nums.begin(); iter != nums.end();){
+                if((*iter)==0){
+                    iter = nums.erase(iter);
+                }
+                else
+                    iter++;
+            }
+            nums.resize(len);
+        }
 };
