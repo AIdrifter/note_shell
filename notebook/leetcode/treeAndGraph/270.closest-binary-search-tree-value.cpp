@@ -48,7 +48,25 @@
  */
 class Solution {
 public:
+    float diff = FLT_MAX;
+    int node_value = 0;
     int closestValue(TreeNode* root, double target) {
-        
+        if(root==NULL)
+            return node_value;
+
+
+        if(fabs(root->val - target) <= diff){
+            diff = fabs(root->val - target);
+            node_value = root->val;
+            // printf("diff %f  node %u \n",diff,node_value);
+        }
+
+        if(root->val > target)
+            closestValue(root->left,  target);
+        else
+            closestValue(root->right, target);
+
+        return node_value;
+
     }
 };
