@@ -133,6 +133,28 @@ public:
      * @return    The number of actual characters read
      */
     int read(char *buf, int n) {
-        
+        // [FIXME]
+        // If I change buf pointer to dst will get wrong answer
+        // I guess the oringinal pattern saved on array, So we can not change it easily
+        char dst[1024*10] = {0};
+        char tmp[4];
+        int i = 0;
+        while(i<n)
+        {
+            int bytes = read4(tmp);
+            if(i+bytes>=n)
+            {
+                bytes = (n-i);
+            }
+            memcpy(buf+i, tmp, bytes);
+            i += bytes;
+
+            //cout<<tmp<<endl;
+            if(bytes!=4)
+                break;
+        }
+        //cout<<buf<<endl;
+        //printf("i(%u) n(%u)\n",i,n);
+        return i;
     }
 };
