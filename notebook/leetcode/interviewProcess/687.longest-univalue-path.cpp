@@ -80,7 +80,28 @@
  */
 class Solution {
 public:
+    int longestPath(TreeNode* root, int *cross_val){
+        if(!root) return 0;
+        int left  = longestPath(root->left,cross_val);
+        int right = longestPath(root->right,cross_val);
+        left  = (root->left  && root->left->val  == root->val) ? left  + 1 : 0;
+        right = (root->right && root->right->val == root->val) ? right + 1 : 0;
+
+        /*
+         * [Trick]
+         *  If left's val is not equavalent to right's val,
+         *  => left=0,right=0
+         *  => cross_val will not changed.
+         */
+
+        *cross_val = max(*cross_val, left + right); // only edge...
+        return max(left,right);
+    }
+
+
     int longestUnivaluePath(TreeNode* root) {
-        
+        int ans = 0; // have to initialize, to get correct 'ans' . 
+        longestPath(root,&ans);
+        return ans;
     }
 };
