@@ -42,6 +42,7 @@ using namespace std;
 class Solution {
     public:
         int missingNumber(vector<int>& nums) {
+#if 0
             if(nums.size()==0)
                 return 0;
 
@@ -61,5 +62,14 @@ class Solution {
 
             // [0,1,2] return 3
             return i;
+#else
+        int n = nums.size();
+        int sum = 0;
+        for(int i = 0; i<n; i++)
+            sum += nums[i];
+            
+        return n*(n+1)/2 - sum;
+#endif
+
         }
 };
