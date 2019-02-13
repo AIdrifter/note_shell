@@ -1,0 +1,27 @@
+#!/bin/sh
+in=$1
+echo "cscope parameter "
+echo "all clean DB"
+
+
+if [ $in = 'all' ];then
+    declare -x  CSCOPE_DB=$PWD
+    echo "start generate cscope and ctags"
+    find ./ -name "*.c" -o -name "*.h" -o -name "*.cpp" > cscope.files
+    cscope -b -k -q -i cscope.files
+    ctags -R -h  ".h.c.cpp.java"
+    echo "finihs"
+fi
+
+if [ $in = 'clean' ];then
+    echo "remove cscope and ctags"
+    rm cs*
+    rm tags
+    echo "finihs"
+fi
+
+
+if [ $in = 'DB' ];then
+    export CSCOPE_DB=$PWD
+fi
+
