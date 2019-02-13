@@ -51,9 +51,12 @@ public:
      * 前面那種寫法不是真正的隨機分佈
      * https://yjk94.wordpress.com/2017/03/17/%E6%B4%97%E7%89%8C%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF-knuth-shuffle%E7%AE%97%E6%B3%95/
      */
-        vector<int> res = oriArray;
+    vector<int> shuffle() { 
+       vector<int> res = oriArray;
+        int t = 0;
         for (int i = 0; i < res.size(); ++i) {
-            int t = i + rand() % (res.size() - i);
+            if(i) t = rand()%i;
+            t = i + rand() % (res.size() - i);
             swap(res[i], res[t]);
         }
         return res;
