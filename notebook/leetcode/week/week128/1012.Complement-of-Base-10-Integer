@@ -1,0 +1,77 @@
+#include <cstring>
+#include <string.h>
+#include <map>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <vector>
+#include <set>
+#include <complex>
+#include <list>
+#define PB push_back
+#define ALL(v) v.begin(),v.end()
+#define RALL(v) v.rbegin(),v.rend()
+#define REP_0(i,m) for(int i=0;i<(int)(m);i++)
+#define FOR_IT(it,c) for(__typeof(c.begin()) it=c.begin();it!=c.end();++it)
+#define MEMSET(a,b) memset(a,b,sizeof(a))
+using namespace std;
+class Solution {
+public:
+#if 0
+    unsigned int hibit(unsigned int n) {
+        n |= (n >>  1);
+        n |= (n >>  2);
+        n |= (n >>  4);
+        n |= (n >>  8);
+        n |= (n >> 16);
+        return n - (n >> 1);
+    }
+#else
+
+     unsigned int hibit(unsigned int n) {
+        if (n == 0)
+            return 0;
+
+        int msb = 0;
+        while (n != 0) {
+            n = n / 2;
+            msb++;
+        }
+
+        return msb;
+    }
+
+#endif
+
+    int bitwiseComplement(int N) {
+        int hbit = hibit(N) ;
+        int mask = 1;
+        for(int i=1;i<hbit;i++)
+        {
+            mask=(mask<<1)+1;
+        }
+
+        return ~N & mask;
+    }
+};
+
+
+
+#if 1
+int main()
+{
+    Solution S;
+    cout<<S.bitwiseComplement(5)<<endl;
+    cout<<S.bitwiseComplement(7)<<endl;
+    cout<<S.bitwiseComplement(10)<<endl;
+    return 0;
+}
+#endif
