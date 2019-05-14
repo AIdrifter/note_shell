@@ -4,3 +4,6 @@ show the C++ symbol
 nm -gC XXX.so
 ```
 
+## C++ managaling
+nm -C
+
