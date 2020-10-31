@@ -57,5 +57,4 @@ function parse_git_branch {
 }
 
 # Disable touch screen
-xinput disable "NTRG0001:01 1B96:1B05"
 HISTTIMEFORMAT=`echo -e "\033[1;34m %F %T \033[0m"`
