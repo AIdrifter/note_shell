@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 in=$1
 echo "cscope parameter "
 echo "all clean DB"

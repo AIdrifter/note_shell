@@ -85,3 +85,19 @@ tig   +  jk等方向鍵
 
 # git revrt file mode
 git diff -p | grep -E '^(diff|old mode|new mode)' | sed -e 's/^old/NEW/;s/^new/old/;s/^NEW/new/' | git apply
+
+# Roku git
+git clone git@gitlab.eng.roku.com:trinidad_mfg_10.5/trinidad_mfg_10.5.git -b mfg/trinidad_mfg_10.5
+cd trinidad_mfg_10.5
+git submodule update --progress --init --depth 1
+git log --graph --decorate --pretty=oneline --abbrev-commit --all -5
+
+# Create remote git branch
+git naming rule:
+https://confluence.portal.roku.com:8443/display/COM/Git+branch+naming+conventions
+
+git branch feature/AUR-600
+git push -u origin feature/AUR-600
+
+git submodule foreach --recursive git diff --name-status
+

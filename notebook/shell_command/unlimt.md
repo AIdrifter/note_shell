@@ -1,0 +1,3 @@
+# unlimt
+ulimit -c unlimited
+
