@@ -11,3 +11,6 @@ telnet 192.168.10.6 8000
 telnet 192.168.10.6 8080
 telnet 192.168.10.6 8085
 telnet 192.168.10.6 8885
+
+config_set fw.system.run-as-process no
+config_set fw.discardable.storage.enable false

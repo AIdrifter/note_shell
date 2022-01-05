@@ -101,3 +101,5 @@ git push -u origin feature/AUR-600
 
 git submodule foreach --recursive git diff --name-status
 
+git pull origin master
+git submodule foreach --recursive git clean -xfd

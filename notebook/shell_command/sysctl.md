@@ -1,5 +1,5 @@
-# sysctlat /proc/sys/kernel/core_pattern
+# sysctl
 ulimit -c unlimited
-sudo sysctl -w kernel.core_pattern=/var/tmp/core-xxx
+sysctl -w kernel.core_pattern=/var/core-%e-%s-%u-%g-%p-%t
 cat /proc/sys/kernel/core_pattern
 

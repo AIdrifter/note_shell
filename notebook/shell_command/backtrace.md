@@ -37,3 +37,8 @@ r2-elf-addr2line
    backtrace_symbols_fd(array, size, STDERR_FILENO);\
 }while(0)
 
+# Roku
+
+#include <Base/Backtrace.h>
+ logger.logConsole("pierre", "%s %s", __func__, Backtrace::getString().c_str());
+https://confluence.portal.roku.com:8443/pages/viewpage.action?pageId=59939083#Core+gdbusefulcommands-Backtraceatruntime
